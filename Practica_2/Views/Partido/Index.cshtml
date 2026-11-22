@@ -1,0 +1,182 @@
+@{
+    ViewData["Title"] = "Partidos Políticos";
+}
+
+<section class="page-header rounded-3 px-4">
+    <div class="page-header-content">
+        <div>
+            <h1 class="page-title"><i class="bi bi-flag-fill"></i>Partidos Políticos</h1>
+            <p class="page-subtitle">Administra partidos, siglas, candidaturas, banderas y estado de habilitación.</p>
+        </div>
+        <button type="button" class="btn btn-crear" data-bs-toggle="modal" data-bs-target="#modalCrearPartido">
+            <i class="bi bi-plus-circle-fill"></i> Nuevo Partido
+        </button>
+    </div>
+</section>
+
+<section class="table-card">
+    <div class="table-card-header d-flex justify-content-between align-items-center">
+        <h2 class="table-card-title"><i class="bi bi-list-check"></i>Partidos Registrados</h2>
+    </div>
+    <div class="table-responsive">
+        <table id="tblPartidos" class="table table-hover align-middle w-100">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Bandera / Siglas</th>
+                    <th>Nombre del Partido</th>
+                    <th>Candidato</th>
+                    <th>Votos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Modal Crear Partido -->
+<div class="modal fade" id="modalCrearPartido" tabindex="-1" aria-labelledby="modalCrearPartidoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content vehicle-modal">
+            <div class="modal-header vehicle-modal-header">
+                <div class="vehicle-modal-heading">
+                    <div class="vehicle-modal-icon">
+                        <i class="bi bi-flag-fill"></i>
+                    </div>
+                    <div>
+                        <span class="vehicle-modal-eyebrow">Candidaturas</span>
+                        <h5 class="modal-title" id="modalCrearPartidoLabel">Nuevo Partido Político</h5>
+                        <p class="vehicle-modal-subtitle mb-0">Registre un partido político para la elección.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="formCrearPartido" novalidate>
+                <div class="modal-body vehicle-modal-body">
+                    <div id="mensajeCrearPartido" class="alert d-none" role="alert"></div>
+
+                    <div class="mb-3 vehicle-field">
+                        <label for="crearNombrePartido" class="form-label">Nombre del Partido</label>
+                        <div class="vehicle-control">
+                            <i class="bi bi-building"></i>
+                            <input type="text" class="form-control" id="crearNombrePartido" name="nombre" placeholder="Ej: Partido Innovación Tecnológica" required maxlength="150" />
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4 vehicle-field">
+                            <label for="crearSiglas" class="form-label">Siglas</label>
+                            <div class="vehicle-control">
+                                <i class="bi bi-tag"></i>
+                                <input type="text" class="form-control text-uppercase" id="crearSiglas" name="siglas" placeholder="Ej: PIT" required maxlength="20" />
+                            </div>
+                        </div>
+                        <div class="col-md-8 vehicle-field">
+                            <label for="crearNombreCandidato" class="form-label">Nombre del Candidato</label>
+                            <div class="vehicle-control">
+                                <i class="bi bi-person-badge"></i>
+                                <input type="text" class="form-control" id="crearNombreCandidato" name="nombreCandidato" placeholder="Ej: Elena Gómez" required maxlength="150" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 vehicle-field">
+                        <label for="crearBanderaUrl" class="form-label">URL de la Bandera <span class="text-muted fw-normal">(opcional)</span></label>
+                        <div class="vehicle-control">
+                            <i class="bi bi-image"></i>
+                            <input type="url" class="form-control" id="crearBanderaUrl" name="banderaUrl" placeholder="https://ejemplo.com/bandera.png" maxlength="500" />
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="crearActivo" name="activo" checked />
+                        <label class="form-check-label fw-semibold" for="crearActivo">Partido activo (habilitado para recibir votos)</label>
+                    </div>
+                </div>
+                <div class="modal-footer vehicle-modal-footer">
+                    <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-modal-primary" id="btnGuardarPartido">
+                        <i class="bi bi-check-lg me-1"></i>Guardar Partido
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Partido -->
+<div class="modal fade" id="modalEditarPartido" tabindex="-1" aria-labelledby="modalEditarPartidoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content vehicle-modal">
+            <div class="modal-header vehicle-modal-header">
+                <div class="vehicle-modal-heading">
+                    <div class="vehicle-modal-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+                    <div>
+                        <span class="vehicle-modal-eyebrow">Candidaturas</span>
+                        <h5 class="modal-title" id="modalEditarPartidoLabel">Editar Partido Político</h5>
+                        <p class="vehicle-modal-subtitle mb-0">Modifique los datos del partido o su estado activo.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="formEditarPartido" novalidate>
+                <input type="hidden" id="editarIdPartido" name="idPartido" />
+                <div class="modal-body vehicle-modal-body">
+                    <div id="mensajeEditarPartido" class="alert d-none" role="alert"></div>
+
+                    <div class="mb-3 vehicle-field">
+                        <label for="editarNombrePartido" class="form-label">Nombre del Partido</label>
+                        <div class="vehicle-control">
+                            <i class="bi bi-building"></i>
+                            <input type="text" class="form-control" id="editarNombrePartido" name="nombre" required maxlength="150" />
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4 vehicle-field">
+                            <label for="editarSiglas" class="form-label">Siglas</label>
+                            <div class="vehicle-control">
+                                <i class="bi bi-tag"></i>
+                                <input type="text" class="form-control text-uppercase" id="editarSiglas" name="siglas" required maxlength="20" />
+                            </div>
+                        </div>
+                        <div class="col-md-8 vehicle-field">
+                            <label for="editarNombreCandidato" class="form-label">Nombre del Candidato</label>
+                            <div class="vehicle-control">
+                                <i class="bi bi-person-badge"></i>
+                                <input type="text" class="form-control" id="editarNombreCandidato" name="nombreCandidato" required maxlength="150" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 vehicle-field">
+                        <label for="editarBanderaUrl" class="form-label">URL de la Bandera <span class="text-muted fw-normal">(opcional)</span></label>
+                        <div class="vehicle-control">
+                            <i class="bi bi-image"></i>
+                            <input type="url" class="form-control" id="editarBanderaUrl" name="banderaUrl" placeholder="https://ejemplo.com/bandera.png" maxlength="500" />
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="editarActivo" name="activo" />
+                        <label class="form-check-label fw-semibold" for="editarActivo">Partido activo (habilitado para recibir votos)</label>
+                    </div>
+                </div>
+                <div class="modal-footer vehicle-modal-footer">
+                    <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-modal-primary" id="btnActualizarPartido">
+                        <i class="bi bi-check-lg me-1"></i>Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/partido.js" asp-append-version="true"></script>
+}

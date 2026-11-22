@@ -1,80 +1,79 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ReservasCostaRica</title>
+    <title>@ViewData["Title"] - VotoElectrónico CR</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
-
 </head>
-
 <body>
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    }
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light app-navbar">
+        <nav class="navbar navbar-expand-md navbar-light app-navbar">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <span class="brand-mark"><i class="bi bi-door-open-fill"></i></span>
-                    <span>Reservas<span class="brand-accent">CR</span></span>
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="brand-mark"><i class="bi bi-check2-square"></i></span>
+                    <span>VotoElectrónico<span class="brand-accent">CR</span></span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-
+                        aria-expanded="false" aria-label="Alternar navegación">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-end">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-grid-1x2-fill"></i> Inicio</a>
-
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Categoria" asp-action="Index"><i class="bi bi-tags-fill"></i> Categorías</a>
+                            <a class="nav-link @(currentController == "Home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-grid-1x2-fill"></i> Inicio
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Producto" asp-action="Index"><i class="bi bi-box-seam"></i> Productos</a>
-
+                            <a class="nav-link @(currentController == "Votante" ? "active" : "")" asp-area="" asp-controller="Votante" asp-action="Index">
+                                <i class="bi bi-people-fill"></i> Votantes
+                            </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Partido" ? "active" : "")" asp-area="" asp-controller="Partido" asp-action="Index">
+                                <i class="bi bi-flag-fill"></i> Partidos Políticos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Voto" ? "active" : "")" asp-area="" asp-controller="Voto" asp-action="Index">
+                                <i class="bi bi-box2-heart-fill"></i> Urna y Resultados
+                            </a>
+                        </li>
                     </ul>
-
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="app-shell">
         <main role="main" class="container app-main">
-
             @RenderBody()
         </main>
-
     </div>
 
     <footer class="app-footer">
-        <div class="container">
-            <span>&copy; 2026 ReservasCostaRica</span>
-            <span>Gestión eficiente de espacios y reservas.</span>
-
+        <div class="container d-flex flex-wrap justify-content-between align-items-center">
+            <span>&copy; 2026 VotoElectrónico CR</span>
+            <span>Sistema de gestión electoral y escrutinio sobre SQLite.</span>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://cdn.datatables.net/3.1.3/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>
-
-
-

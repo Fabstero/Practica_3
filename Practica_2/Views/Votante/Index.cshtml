@@ -1,0 +1,192 @@
+@{
+    ViewData["Title"] = "Votantes";
+}
+
+<section class="page-header rounded-3 px-4">
+    <div class="page-header-content">
+        <div>
+            <h1 class="page-title"><i class="bi bi-people-fill"></i>Gestión de Votantes</h1>
+            <p class="page-subtitle">Administra el padrón electoral y consulta el estado de emisión de voto.</p>
+        </div>
+        <button type="button" class="btn btn-crear" data-bs-toggle="modal" data-bs-target="#modalCrearVotante">
+            <i class="bi bi-person-plus-fill"></i> Nuevo Votante
+        </button>
+    </div>
+</section>
+
+<section class="table-card">
+    <div class="table-card-header d-flex justify-content-between align-items-center">
+        <h2 class="table-card-title"><i class="bi bi-card-list"></i>Padrón Electoral Registrado</h2>
+    </div>
+    <div class="table-responsive">
+        <table id="tblVotantes" class="table table-hover align-middle w-100">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cédula</th>
+                    <th>Nombre Completo</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Provincia</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Modal Crear Votante -->
+<div class="modal fade" id="modalCrearVotante" tabindex="-1" aria-labelledby="modalCrearVotanteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content vehicle-modal">
+            <div class="modal-header vehicle-modal-header">
+                <div class="vehicle-modal-heading">
+                    <div class="vehicle-modal-icon">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+                    <div>
+                        <span class="vehicle-modal-eyebrow">Padrón Electoral</span>
+                        <h5 class="modal-title" id="modalCrearVotanteLabel">Registrar Votante</h5>
+                        <p class="vehicle-modal-subtitle mb-0">Ingrese los datos del ciudadano a empadronar.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="formCrearVotante" novalidate>
+                <div class="modal-body vehicle-modal-body">
+                    <div id="mensajeCrearVotante" class="alert d-none" role="alert"></div>
+
+                    <div class="mb-3 vehicle-field">
+                        <label for="crearCedula" class="form-label">Cédula</label>
+                        <div class="vehicle-control">
+                            <i class="bi bi-person-vcard"></i>
+                            <input type="text" class="form-control" id="crearCedula" name="cedula" placeholder="Ej: 101110111" required maxlength="30" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3 vehicle-field">
+                        <label for="crearNombreCompleto" class="form-label">Nombre Completo</label>
+                        <div class="vehicle-control">
+                            <i class="bi bi-person"></i>
+                            <input type="text" class="form-control" id="crearNombreCompleto" name="nombreCompleto" placeholder="Nombre y apellidos" required maxlength="150" />
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6 vehicle-field">
+                            <label for="crearFechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                            <div class="vehicle-control">
+                                <i class="bi bi-calendar-date"></i>
+                                <input type="date" class="form-control" id="crearFechaNacimiento" name="fechaNacimiento" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 vehicle-field">
+                            <label for="crearProvincia" class="form-label">Provincia</label>
+                            <div class="vehicle-control">
+                                <i class="bi bi-geo-alt"></i>
+                                <select class="form-select" id="crearProvincia" name="provincia" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="San José">San José</option>
+                                    <option value="Alajuela">Alajuela</option>
+                                    <option value="Cartago">Cartago</option>
+                                    <option value="Heredia">Heredia</option>
+                                    <option value="Guanacaste">Guanacaste</option>
+                                    <option value="Puntarenas">Puntarenas</option>
+                                    <option value="Limón">Limón</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer vehicle-modal-footer">
+                    <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-modal-primary" id="btnGuardarVotante">
+                        <i class="bi bi-check-lg me-1"></i>Guardar Votante
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Votante -->
+<div class="modal fade" id="modalEditarVotante" tabindex="-1" aria-labelledby="modalEditarVotanteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content vehicle-modal">
+            <div class="modal-header vehicle-modal-header">
+                <div class="vehicle-modal-heading">
+                    <div class="vehicle-modal-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+                    <div>
+                        <span class="vehicle-modal-eyebrow">Padrón Electoral</span>
+                        <h5 class="modal-title" id="modalEditarVotanteLabel">Editar Votante</h5>
+                        <p class="vehicle-modal-subtitle mb-0">Actualice los datos personales del votante.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="formEditarVotante" novalidate>
+                <input type="hidden" id="editarIdVotante" name="idVotante" />
+                <div class="modal-body vehicle-modal-body">
+                    <div id="mensajeEditarVotante" class="alert d-none" role="alert"></div>
+
+                    <div class="mb-3 vehicle-field">
+                        <label for="editarCedula" class="form-label">Cédula</label>
+                        <div class="vehicle-control">
+                            <i class="bi bi-person-vcard"></i>
+                            <input type="text" class="form-control" id="editarCedula" name="cedula" required maxlength="30" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3 vehicle-field">
+                        <label for="editarNombreCompleto" class="form-label">Nombre Completo</label>
+                        <div class="vehicle-control">
+                            <i class="bi bi-person"></i>
+                            <input type="text" class="form-control" id="editarNombreCompleto" name="nombreCompleto" required maxlength="150" />
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6 vehicle-field">
+                            <label for="editarFechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                            <div class="vehicle-control">
+                                <i class="bi bi-calendar-date"></i>
+                                <input type="date" class="form-control" id="editarFechaNacimiento" name="fechaNacimiento" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 vehicle-field">
+                            <label for="editarProvincia" class="form-label">Provincia</label>
+                            <div class="vehicle-control">
+                                <i class="bi bi-geo-alt"></i>
+                                <select class="form-select" id="editarProvincia" name="provincia" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="San José">San José</option>
+                                    <option value="Alajuela">Alajuela</option>
+                                    <option value="Cartago">Cartago</option>
+                                    <option value="Heredia">Heredia</option>
+                                    <option value="Guanacaste">Guanacaste</option>
+                                    <option value="Puntarenas">Puntarenas</option>
+                                    <option value="Limón">Limón</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer vehicle-modal-footer">
+                    <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-modal-primary" id="btnActualizarVotante">
+                        <i class="bi bi-check-lg me-1"></i>Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/votante.js" asp-append-version="true"></script>
+}

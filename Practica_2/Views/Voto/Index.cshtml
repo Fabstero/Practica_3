@@ -1,0 +1,152 @@
+@{
+    ViewData["Title"] = "Urna Electrónica y Resultados";
+}
+
+<section class="page-header rounded-3 px-4">
+    <div class="page-header-content">
+        <div>
+            <h1 class="page-title"><i class="bi bi-box2-heart-fill"></i>Urna Electrónica y Escrutinio</h1>
+            <p class="page-subtitle">Valida al votante por cédula, registra su voto de forma única y consulta los resultados en vivo.</p>
+        </div>
+        <button type="button" class="btn btn-outline-primary fw-semibold" id="btnRefrescarResultados">
+            <i class="bi bi-arrow-clockwise me-1"></i> Actualizar Resultados
+        </button>
+    </div>
+</section>
+
+<!-- Métricas en vivo -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="metric-card">
+            <div class="metric-icon metric-icon-primary"><i class="bi bi-people-fill"></i></div>
+            <div>
+                <span class="metric-label">Total Votantes</span>
+                <h3 class="metric-value" id="metricTotalVotantes">0</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="metric-card">
+            <div class="metric-icon metric-icon-success"><i class="bi bi-check2-all"></i></div>
+            <div>
+                <span class="metric-label">Votos Emitidos</span>
+                <h3 class="metric-value" id="metricTotalVotos">0</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="metric-card">
+            <div class="metric-icon metric-icon-warning"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+                <span class="metric-label">Pendientes</span>
+                <h3 class="metric-value" id="metricPendientes">0</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="metric-card">
+            <div class="metric-icon metric-icon-info"><i class="bi bi-pie-chart-fill"></i></div>
+            <div>
+                <span class="metric-label">Participación</span>
+                <h3 class="metric-value" id="metricParticipacion">0.0%</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Panel de Urna Electrónica -->
+    <div class="col-lg-7">
+        <div class="table-card h-100">
+            <div class="table-card-header">
+                <h2 class="table-card-title"><i class="bi bi-ballot-fill"></i>Emitir Voto</h2>
+            </div>
+            <div class="p-4">
+                <div id="mensajeUrna" class="alert d-none" role="alert"></div>
+
+                <div class="mb-3">
+                    <label for="inputBuscarCedula" class="form-label">1. Identificar votante (por cédula o lista de pendientes)</label>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" id="inputBuscarCedula" class="form-control" placeholder="Buscar por cédula (ej: 101110111)" />
+                                <button type="button" class="btn btn-primary" id="btnBuscarCedula">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="selectVotantePendiente" class="form-select">
+                                <option value="">-- Seleccionar votante pendiente --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tarjetaVotanteSeleccionado" class="voter-selected-box d-none mb-4">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <strong id="votanteSelNombre"></strong>
+                            <div class="small text-muted">
+                                Cédula: <span id="votanteSelCedula"></span> &middot; Provincia: <span id="votanteSelProvincia"></span>
+                            </div>
+                        </div>
+                        <span id="votanteSelEstado" class="badge"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">2. Seleccione un partido político activo</label>
+                    <div id="listaPartidosUrna" class="row g-3">
+                        <div class="col-12 text-muted small">Cargando partidos habilitados...</div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="button" id="btnEmitirVoto" class="btn btn-crear px-4" disabled>
+                        <i class="bi bi-check2-square"></i> Confirmar y Emitir Voto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Escrutinio en vivo -->
+    <div class="col-lg-5">
+        <div class="table-card h-100">
+            <div class="table-card-header">
+                <h2 class="table-card-title"><i class="bi bi-bar-chart-fill"></i>Escrutinio en Vivo</h2>
+            </div>
+            <div class="p-4" id="contenedorEscrutinio">
+                <p class="text-muted mb-0">Cargando resultados...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Historial de Votos -->
+<section class="table-card">
+    <div class="table-card-header">
+        <h2 class="table-card-title"><i class="bi bi-clock-history"></i>Historial de Votos Registrados</h2>
+    </div>
+    <div class="table-responsive">
+        <table id="tblVotos" class="table table-hover align-middle w-100">
+            <thead>
+                <tr>
+                    <th>ID Voto</th>
+                    <th>Cédula</th>
+                    <th>Votante</th>
+                    <th>Provincia</th>
+                    <th>Partido</th>
+                    <th>Candidato</th>
+                    <th>Fecha y Hora</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/voto.js" asp-append-version="true"></script>
+}

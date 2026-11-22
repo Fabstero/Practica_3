@@ -1,36 +1,97 @@
-﻿@{
+@model Practica_2.Application.Dtos.ResumenVotacionDto
+@{
     ViewData["Title"] = "Inicio";
 }
 
 <section class="home-page">
     <div class="home-heading">
-        <h1>Tu inventario de productos<br /><span>bajo control.</span></h1>
-        <p>Administra categorías y productos desde un solo lugar.</p>
+        <h1>Sistema de Votaciones<br /><span>en tiempo real.</span></h1>
+        <p>Administra el padrón electoral, los partidos políticos y el escrutinio desde un solo lugar.</p>
     </div>
 
-    <a class="home-feature" asp-controller="Categoria" asp-action="Index">
-        <div class="home-feature-icon"><i class="bi bi-tags-fill"></i></div>
-        <div class="home-feature-copy">
-            <span class="home-feature-label">GESTIÓN</span>
-            <h2>Categorías de productos</h2>
-            <p>Consulta, registra y mantén al día las categorías disponibles.</p>
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="metric-card">
+                <div class="metric-icon metric-icon-primary">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                    <span class="metric-label">Padrón Electoral</span>
+                    <h3 class="metric-value">@Model.TotalVotantes</h3>
+                    <small class="text-muted">@Model.VotantesPendientes pendientes de votar</small>
+                </div>
+            </div>
         </div>
-        <span class="home-feature-link">Ver categorías <i class="bi bi-arrow-up-right"></i></span>
+        <div class="col-sm-6 col-lg-3">
+            <div class="metric-card">
+                <div class="metric-icon metric-icon-success">
+                    <i class="bi bi-check2-circle"></i>
+                </div>
+                <div>
+                    <span class="metric-label">Votos Emitidos</span>
+                    <h3 class="metric-value">@Model.TotalVotosEmitidos</h3>
+                    <small class="text-muted">Voto único verificado</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="metric-card">
+                <div class="metric-icon metric-icon-info">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div>
+                    <span class="metric-label">Participación</span>
+                    <h3 class="metric-value">@Model.PorcentajeParticipacion.ToString("0.0")%</h3>
+                    <small class="text-muted">Sobre padrón activo</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="metric-card">
+                <div class="metric-icon metric-icon-warning">
+                    <i class="bi bi-flag-fill"></i>
+                </div>
+                <div>
+                    <span class="metric-label">Partidos Activos</span>
+                    <h3 class="metric-value">@Model.PartidosActivos <span class="fs-6 text-muted">/ @Model.TotalPartidos</span></h3>
+                    <small class="text-muted">Habilitados en urna</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a class="home-feature" asp-controller="Voto" asp-action="Index">
+        <div class="home-feature-icon"><i class="bi bi-box2-heart-fill"></i></div>
+        <div class="home-feature-copy">
+            <span class="home-feature-label">VOTACIÓN</span>
+            <h2>Urna Electrónica y Escrutinio</h2>
+            <p>Emite votos de forma atómica con validación de cédula única, consulta el escrutinio en vivo y revisa el historial.</p>
+        </div>
+        <span class="home-feature-link">Ir a la urna <i class="bi bi-arrow-up-right"></i></span>
     </a>
 
-    <a class="home-feature" asp-controller="Producto" asp-action="Index">
-        <div class="home-feature-icon"><i class="bi bi-box-seam-fill"></i></div>
+    <a class="home-feature" asp-controller="Votante" asp-action="Index">
+        <div class="home-feature-icon"><i class="bi bi-people-fill"></i></div>
         <div class="home-feature-copy">
-            <span class="home-feature-label">GESTIÓN</span>
-            <h2>Gestión de productos</h2>
-            <p>Consulta, registra y mantén al día los datos de cada producto.</p>
+            <span class="home-feature-label">PADRÓN</span>
+            <h2>Gestión de Votantes</h2>
+            <p>Consulta, registra, edita y controla el estado de votación de cada persona empadronada por cédula y provincia.</p>
         </div>
-        <span class="home-feature-link">Ver productos <i class="bi bi-arrow-up-right"></i></span>
+        <span class="home-feature-link">Ver votantes <i class="bi bi-arrow-up-right"></i></span>
+    </a>
+
+    <a class="home-feature" asp-controller="Partido" asp-action="Index">
+        <div class="home-feature-icon"><i class="bi bi-flag-fill"></i></div>
+        <div class="home-feature-copy">
+            <span class="home-feature-label">CANDIDATURAS</span>
+            <h2>Partidos Políticos</h2>
+            <p>Administra partidos, siglas, candidaturas, banderas y su disponibilidad en la papeleta electoral.</p>
+        </div>
+        <span class="home-feature-link">Ver partidos <i class="bi bi-arrow-up-right"></i></span>
     </a>
 
     <div class="home-note">
-        <span class="home-note-mark"><i class="bi bi-check2"></i></span>
-        <p><strong>Todo en orden.</strong> Accede a categorías y productos para gestionar tu inventario.</p>
+        <span class="home-note-mark"><i class="bi bi-shield-check"></i></span>
+        <p><strong>Integridad garantizada.</strong> La base de datos SQLite aplica llaves foráneas <code>ON DELETE RESTRICT</code>, unicidad de voto por votante y validaciones automáticas en cada operación.</p>
     </div>
 </section>
-

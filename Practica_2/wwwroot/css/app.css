@@ -616,3 +616,155 @@ footer {
         flex-wrap: wrap;
     }
 }
+
+/* ==========================================
+   Voting System Components
+   ========================================== */
+
+.nav-link.active {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+.metric-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    height: 100%;
+}
+
+.metric-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.metric-icon-primary {
+    background-color: #e7f1ff;
+    color: var(--primary-color);
+}
+
+.metric-icon-success {
+    background-color: #e6f4ea;
+    color: var(--success-color);
+}
+
+.metric-icon-info {
+    background-color: #e0f7fa;
+    color: #0b7285;
+}
+
+.metric-icon-warning {
+    background-color: #fff8e1;
+    color: #b7791f;
+}
+
+.metric-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--secondary-color);
+    letter-spacing: 0.03em;
+}
+
+.metric-value {
+    margin: 0.15rem 0 0;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+.party-flag-thumb {
+    width: 34px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.party-flag-ballot {
+    width: 48px;
+    height: 34px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    flex-shrink: 0;
+}
+
+.party-siglas-avatar {
+    width: 34px;
+    height: 24px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, var(--primary-color), #0b5ed7);
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.party-siglas-avatar-lg {
+    width: 48px;
+    height: 38px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.voter-selected-box {
+    background-color: #f1f7ff;
+    border: 1px solid #cfe2ff;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+}
+
+.party-ballot-card {
+    background: #ffffff;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 100%;
+}
+
+.party-ballot-card:hover {
+    border-color: #86b7fe;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.12);
+    transform: translateY(-1px);
+}
+
+.party-ballot-card .ballot-check-icon {
+    color: transparent;
+    font-size: 1.15rem;
+    transition: color 0.15s ease;
+}
+
+.party-ballot-card.selected {
+    border-color: var(--success-color);
+    background-color: #f2fbf6;
+    box-shadow: 0 4px 14px rgba(25, 135, 84, 0.18);
+}
+
+.party-ballot-card.selected .ballot-check-icon {
+    color: var(--success-color);
+}
+
+.scrutiny-progress {
+    height: 10px;
+    border-radius: 999px;
+    background-color: #e9ecef;
+}
+

@@ -1,17 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Practica_2.Application.Mapping;
+using Practica_2.Application.Services;
 using Practica_2.Infrastructure.Data;
 using Practica_2.Infrastructure.Repositories;
 using Practica_2.Infrastructure.Repository;
-using Practica_2.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
 var conexion = builder.Configuration
     .GetConnectionString("ConexionSQLite")
-    ?? throw new InvalidOperationException(
-        "No se encontro la conexion SQLite.");
+    ?? throw new InvalidOperationException("No se encontró la conexión SQLite.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(conexion));
@@ -20,14 +20,16 @@ builder.Services.AddScoped(
     typeof(IRepositorioGenerico<>),
     typeof(RepositorioGenerico<>));
 
-builder.Services.AddScoped<IProductoServicio, ProductoServicio>();
+builder.Services.AddScoped<IVotanteRepository, VotanteRepository>();
+builder.Services.AddScoped<IPartidoPoliticoRepository, PartidoPoliticoRepository>();
+builder.Services.AddScoped<IVotoRepository, VotoRepository>();
+
+builder.Services.AddScoped<IVotanteServicio, VotanteServicio>();
+builder.Services.AddScoped<IPartidoPoliticoServicio, PartidoPoliticoServicio>();
+builder.Services.AddScoped<IVotoServicio, VotoServicio>();
 
 builder.Services.AddProblemDetails();
 
-builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-builder.Services.AddScoped<ICategoriaServicio, CategoriaServicio>();
-
-//ADD MAPPER
 builder.Services.AddAutoMapper(cfg => { }, typeof(MapeoClases));
 
 var app = builder.Build();
@@ -35,9 +37,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.EnsureCreated();
+    await DbInitializer.InicializarAsync(db);
 }
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -46,14 +47,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-
-app.UseExceptionHandler();
-
-if (!app.Environment.IsDevelopment())
-{
     app.UseHsts();
 }
 
