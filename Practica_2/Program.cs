@@ -1,44 +1,36 @@
-using Microsoft.EntityFrameworkCore;
-using Practica_2.Application.Mapping;
+using Practica_2.Api;
 using Practica_2.Application.Services;
-using Practica_2.Infrastructure.Data;
-using Practica_2.Infrastructure.Repositories;
-using Practica_2.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-var conexion = builder.Configuration
-    .GetConnectionString("ConexionSQLite")
-    ?? throw new InvalidOperationException("No se encontró la conexión SQLite.");
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(conexion));
-
-builder.Services.AddScoped(
-    typeof(IRepositorioGenerico<>),
-    typeof(RepositorioGenerico<>));
-
-builder.Services.AddScoped<IVotanteRepository, VotanteRepository>();
-builder.Services.AddScoped<IPartidoPoliticoRepository, PartidoPoliticoRepository>();
-builder.Services.AddScoped<IVotoRepository, VotoRepository>();
-
-builder.Services.AddScoped<IVotanteServicio, VotanteServicio>();
-builder.Services.AddScoped<IPartidoPoliticoServicio, PartidoPoliticoServicio>();
-builder.Services.AddScoped<IVotoServicio, VotoServicio>();
-
 builder.Services.AddProblemDetails();
 
-builder.Services.AddAutoMapper(cfg => { }, typeof(MapeoClases));
+var apiBaseUrl = builder.Configuration["Api:BaseUrl"]
+    ?? throw new InvalidOperationException("No se encontró la URL base de la API.");
+
+if (!Uri.TryCreate(apiBaseUrl, UriKind.Absolute, out var apiUri))
+{
+    throw new InvalidOperationException("La URL base de la API no es válida.");
+}
+
+builder.Services.AddHttpClient<IVotanteServicio, ApiVotanteServicio>(client =>
+{
+    client.BaseAddress = apiUri;
+});
+
+builder.Services.AddHttpClient<IPartidoPoliticoServicio, ApiPartidoPoliticoServicio>(client =>
+{
+    client.BaseAddress = apiUri;
+});
+
+builder.Services.AddHttpClient<IVotoServicio, ApiVotoServicio>(client =>
+{
+    client.BaseAddress = apiUri;
+});
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await DbInitializer.InicializarAsync(db);
-}
 
 if (app.Environment.IsDevelopment())
 {
